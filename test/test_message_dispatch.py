@@ -13,13 +13,11 @@ import sys
 import unittest
 
 import ory_kratos_client
-from ory_kratos_client.model.session_authentication_method import SessionAuthenticationMethod
-globals()['SessionAuthenticationMethod'] = SessionAuthenticationMethod
-from ory_kratos_client.model.session_authentication_methods import SessionAuthenticationMethods
+from ory_kratos_client.model.message_dispatch import MessageDispatch
 
 
-class TestSessionAuthenticationMethods(unittest.TestCase):
-    """SessionAuthenticationMethods unit test stubs"""
+class TestMessageDispatch(unittest.TestCase):
+    """MessageDispatch unit test stubs"""
 
     def setUp(self):
         pass
@@ -27,10 +25,10 @@ class TestSessionAuthenticationMethods(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testSessionAuthenticationMethods(self):
-        """Test SessionAuthenticationMethods"""
+    def testMessageDispatch(self):
+        """Test MessageDispatch"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = SessionAuthenticationMethods()  # noqa: E501
+        # model = MessageDispatch()  # noqa: E501
         pass
 
 

@@ -13,11 +13,13 @@ import sys
 import unittest
 
 import ory_kratos_client
-from ory_kratos_client.model.update_login_flow_with_password_method import UpdateLoginFlowWithPasswordMethod
+from ory_kratos_client.model.session import Session
+globals()['Session'] = Session
+from ory_kratos_client.model.successful_code_exchange_response import SuccessfulCodeExchangeResponse
 
 
-class TestUpdateLoginFlowWithPasswordMethod(unittest.TestCase):
-    """UpdateLoginFlowWithPasswordMethod unit test stubs"""
+class TestSuccessfulCodeExchangeResponse(unittest.TestCase):
+    """SuccessfulCodeExchangeResponse unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,10 +27,10 @@ class TestUpdateLoginFlowWithPasswordMethod(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testUpdateLoginFlowWithPasswordMethod(self):
-        """Test UpdateLoginFlowWithPasswordMethod"""
+    def testSuccessfulCodeExchangeResponse(self):
+        """Test SuccessfulCodeExchangeResponse"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = UpdateLoginFlowWithPasswordMethod()  # noqa: E501
+        # model = SuccessfulCodeExchangeResponse()  # noqa: E501
         pass
 
 

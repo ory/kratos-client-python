@@ -22,7 +22,7 @@ print(IsReady503Response.to_json())
 # convert the object into a dict
 is_ready503_response_dict = is_ready503_response_instance.to_dict()
 # create an instance of IsReady503Response from a dict
-is_ready503_response_form_dict = is_ready503_response.from_dict(is_ready503_response_dict)
+is_ready503_response_from_dict = IsReady503Response.from_dict(is_ready503_response_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

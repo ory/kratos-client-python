@@ -22,7 +22,7 @@ print(IsAlive200Response.to_json())
 # convert the object into a dict
 is_alive200_response_dict = is_alive200_response_instance.to_dict()
 # create an instance of IsAlive200Response from a dict
-is_alive200_response_form_dict = is_alive200_response.from_dict(is_alive200_response_dict)
+is_alive200_response_from_dict = IsAlive200Response.from_dict(is_alive200_response_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

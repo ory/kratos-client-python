@@ -14,6 +14,7 @@ Method | HTTP request | Description
 [**disable_session**](IdentityApi.md#disable_session) | **DELETE** /admin/sessions/{id} | Deactivate a Session
 [**extend_session**](IdentityApi.md#extend_session) | **PATCH** /admin/sessions/{id}/extend | Extend a Session
 [**get_identity**](IdentityApi.md#get_identity) | **GET** /admin/identities/{id} | Get an Identity
+[**get_identity_by_external_id**](IdentityApi.md#get_identity_by_external_id) | **GET** /admin/identities/by/external/{externalID} | Get an Identity by its External ID
 [**get_identity_schema**](IdentityApi.md#get_identity_schema) | **GET** /schemas/{id} | Get Identity JSON Schema
 [**get_session**](IdentityApi.md#get_session) | **GET** /admin/sessions/{id} | Get Session
 [**list_identities**](IdentityApi.md#list_identities) | **GET** /admin/identities | List Identities
@@ -29,7 +30,28 @@ Method | HTTP request | Description
 
 Create multiple identities
 
-Creates multiple [identities](https://www.ory.sh/docs/kratos/concepts/identity-user-model). This endpoint can also be used to [import credentials](https://www.ory.sh/docs/kratos/manage-identities/import-user-accounts-identities) for instance passwords, social sign in configurations or multifactor methods.
+Creates multiple [identities](https://www.ory.sh/docs/kratos/concepts/identity-user-model).
+
+You can also use this endpoint to [import credentials](https://www.ory.sh/docs/kratos/manage-identities/import-user-accounts-identities),
+including passwords, social sign-in settings, and multi-factor authentication methods.
+
+You can import:
+Up to 1,000 identities per request
+Up to 200 identities per request if including plaintext passwords
+
+Avoid importing large batches with plaintext passwords. They can cause timeouts as the passwords need to be hashed before they are stored.
+
+If at least one identity is imported successfully, the response status is 200 OK.
+If all imports fail, the response is one of the following 4xx errors:
+400 Bad Request: The request payload is invalid or improperly formatted.
+409 Conflict: Duplicate identities or conflicting data were detected.
+
+If you get a 504 Gateway Timeout:
+Reduce the batch size
+Avoid duplicate identities
+Pre-hash passwords with BCrypt
+
+If the issue persists, contact support.
 
 ### Example
 
@@ -112,7 +134,9 @@ Name | Type | Description  | Notes
 
 Create an Identity
 
-Create an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model).  This endpoint can also be used to [import credentials](https://www.ory.sh/docs/kratos/manage-identities/import-user-accounts-identities) for instance passwords, social sign in configurations or multifactor methods.
+Create an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model).  This endpoint can also be used to
+[import credentials](https://www.ory.sh/docs/kratos/manage-identities/import-user-accounts-identities)
+for instance passwords, social sign in configurations or multifactor methods.
 
 ### Example
 
@@ -195,7 +219,8 @@ Name | Type | Description  | Notes
 
 Create a Recovery Code
 
-This endpoint creates a recovery code which should be given to the user in order for them to recover (or activate) their account.
+This endpoint creates a recovery code which should be given to the user in order for them to recover
+(or activate) their account.
 
 ### Example
 
@@ -278,7 +303,8 @@ Name | Type | Description  | Notes
 
 Create a Recovery Link
 
-This endpoint creates a recovery link which should be given to the user in order for them to recover (or activate) their account.
+This endpoint creates a recovery link which should be given to the user in order for them to recover
+(or activate) their account.
 
 ### Example
 
@@ -363,7 +389,8 @@ Name | Type | Description  | Notes
 
 Delete an Identity
 
-Calling this endpoint irrecoverably and permanently deletes the [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) given its ID. This action can not be undone. This endpoint returns 204 when the identity was deleted or when the identity was not found, in which case it is assumed that is has been deleted already.
+Calling this endpoint irrecoverably and permanently deletes the [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) given its ID. This action can not be undone.
+This endpoint returns 204 when the identity was deleted or 404 if the identity was not found.
 
 ### Example
 
@@ -441,7 +468,8 @@ void (empty response body)
 
 Delete a credential for a specific identity
 
-Delete an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) credential by its type. You cannot delete password or code auth credentials through this API.
+Delete an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) credential by its type.
+You cannot delete passkeys or code auth credentials through this API.
 
 ### Example
 
@@ -475,7 +503,7 @@ with ory_kratos_client.ApiClient(configuration) as api_client:
     api_instance = ory_kratos_client.IdentityApi(api_client)
     id = 'id_example' # str | ID is the identity's ID.
     type = 'type_example' # str | Type is the type of credentials to delete. password CredentialsTypePassword oidc CredentialsTypeOIDC totp CredentialsTypeTOTP lookup_secret CredentialsTypeLookup webauthn CredentialsTypeWebAuthn code CredentialsTypeCodeAuth passkey CredentialsTypePasskey profile CredentialsTypeProfile saml CredentialsTypeSAML link_recovery CredentialsTypeRecoveryLink  CredentialsTypeRecoveryLink is a special credential type linked to the link strategy (recovery flow).  It is not used within the credentials object itself. code_recovery CredentialsTypeRecoveryCode
-    identifier = 'identifier_example' # str | Identifier is the identifier of the OIDC credential to delete. Find the identifier by calling the `GET /admin/identities/{id}?include_credential=oidc` endpoint. (optional)
+    identifier = 'identifier_example' # str | Identifier is the identifier of the OIDC/SAML credential to delete. Find the identifier by calling the `GET /admin/identities/{id}?include_credential={oidc,saml}` endpoint. (optional)
 
     try:
         # Delete a credential for a specific identity
@@ -493,7 +521,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**| ID is the identity&#39;s ID. | 
  **type** | **str**| Type is the type of credentials to delete. password CredentialsTypePassword oidc CredentialsTypeOIDC totp CredentialsTypeTOTP lookup_secret CredentialsTypeLookup webauthn CredentialsTypeWebAuthn code CredentialsTypeCodeAuth passkey CredentialsTypePasskey profile CredentialsTypeProfile saml CredentialsTypeSAML link_recovery CredentialsTypeRecoveryLink  CredentialsTypeRecoveryLink is a special credential type linked to the link strategy (recovery flow).  It is not used within the credentials object itself. code_recovery CredentialsTypeRecoveryCode | 
- **identifier** | **str**| Identifier is the identifier of the OIDC credential to delete. Find the identifier by calling the &#x60;GET /admin/identities/{id}?include_credential&#x3D;oidc&#x60; endpoint. | [optional] 
+ **identifier** | **str**| Identifier is the identifier of the OIDC/SAML credential to delete. Find the identifier by calling the &#x60;GET /admin/identities/{id}?include_credential&#x3D;{oidc,saml}&#x60; endpoint. | [optional] 
 
 ### Return type
 
@@ -682,7 +710,17 @@ void (empty response body)
 
 Extend a Session
 
-Calling this endpoint extends the given session ID. If `session.earliest_possible_extend` is set it will only extend the session after the specified time has passed.  This endpoint returns per default a 204 No Content response on success. Older Ory Network projects may return a 200 OK response with the session in the body. Returning the session as part of the response will be deprecated in the future and should not be relied upon.  This endpoint ignores consecutive requests to extend the same session and returns a 404 error in those scenarios. This endpoint also returns 404 errors if the session does not exist.  Retrieve the session ID from the `/sessions/whoami` endpoint / `toSession` SDK method.
+Calling this endpoint extends the given session ID. If `session.earliest_possible_extend` is set it
+will only extend the session after the specified time has passed.
+
+This endpoint returns per default a 204 No Content response on success. Older Ory Network projects may
+return a 200 OK response with the session in the body. Returning the session as part of the response
+will be deprecated in the future and should not be relied upon.
+
+This endpoint ignores consecutive requests to extend the same session and returns a 404 error in those
+scenarios. This endpoint also returns 404 errors if the session does not exist.
+
+Retrieve the session ID from the `/sessions/whoami` endpoint / `toSession` SDK method.
 
 ### Example
 
@@ -765,7 +803,8 @@ Name | Type | Description  | Notes
 
 Get an Identity
 
-Return an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) by its ID. You can optionally include credentials (e.g. social sign in connections) in the response by using the `include_credential` query parameter.
+Return an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) by its ID. You can optionally
+include credentials (e.g. social sign in connections) in the response by using the `include_credential` query parameter.
 
 ### Example
 
@@ -818,6 +857,90 @@ with ory_kratos_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**| ID must be set to the ID of identity you want to get | 
+ **include_credential** | [**List[str]**](str.md)| Include Credentials in Response  Include any credential, for example &#x60;password&#x60; or &#x60;oidc&#x60;, in the response. When set to &#x60;oidc&#x60;, This will return the initial OAuth 2.0 Access Token, OAuth 2.0 Refresh Token and the OpenID Connect ID Token if available. | [optional] 
+
+### Return type
+
+[**Identity**](Identity.md)
+
+### Authorization
+
+[oryAccessToken](../README.md#oryAccessToken)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | identity |  -  |
+**404** | errorGeneric |  -  |
+**0** | errorGeneric |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_identity_by_external_id**
+> Identity get_identity_by_external_id(external_id, include_credential=include_credential)
+
+Get an Identity by its External ID
+
+Return an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) by its external ID. You can optionally
+include credentials (e.g. social sign in connections) in the response by using the `include_credential` query parameter.
+
+### Example
+
+* Api Key Authentication (oryAccessToken):
+
+```python
+import ory_kratos_client
+from ory_kratos_client.models.identity import Identity
+from ory_kratos_client.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = ory_kratos_client.Configuration(
+    host = "http://localhost"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure API key authorization: oryAccessToken
+configuration.api_key['oryAccessToken'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['oryAccessToken'] = 'Bearer'
+
+# Enter a context with an instance of the API client
+with ory_kratos_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = ory_kratos_client.IdentityApi(api_client)
+    external_id = 'external_id_example' # str | ExternalID must be set to the ID of identity you want to get
+    include_credential = ['include_credential_example'] # List[str] | Include Credentials in Response  Include any credential, for example `password` or `oidc`, in the response. When set to `oidc`, This will return the initial OAuth 2.0 Access Token, OAuth 2.0 Refresh Token and the OpenID Connect ID Token if available. (optional)
+
+    try:
+        # Get an Identity by its External ID
+        api_response = api_instance.get_identity_by_external_id(external_id, include_credential=include_credential)
+        print("The response of IdentityApi->get_identity_by_external_id:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling IdentityApi->get_identity_by_external_id: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **external_id** | **str**| ExternalID must be set to the ID of identity you want to get | 
  **include_credential** | [**List[str]**](str.md)| Include Credentials in Response  Include any credential, for example &#x60;password&#x60; or &#x60;oidc&#x60;, in the response. When set to &#x60;oidc&#x60;, This will return the initial OAuth 2.0 Access Token, OAuth 2.0 Refresh Token and the OpenID Connect ID Token if available. | [optional] 
 
 ### Return type
@@ -917,7 +1040,9 @@ No authorization required
 
 Get Session
 
-This endpoint is useful for:  Getting a session object with all specified expandables that exist in an administrative context.
+This endpoint is useful for:
+
+Getting a session object with all specified expandables that exist in an administrative context.
 
 ### Example
 
@@ -1352,7 +1477,8 @@ Name | Type | Description  | Notes
 
 Patch an Identity
 
-Partially updates an [identity's](https://www.ory.sh/docs/kratos/concepts/identity-user-model) field using [JSON Patch](https://jsonpatch.com/). The fields `id`, `stateChangedAt` and `credentials` can not be updated using this method.
+Partially updates an [identity's](https://www.ory.sh/docs/kratos/concepts/identity-user-model) field using [JSON Patch](https://jsonpatch.com/).
+The fields `id`, `stateChangedAt` and `credentials` can not be updated using this method.
 
 ### Example
 
@@ -1438,7 +1564,11 @@ Name | Type | Description  | Notes
 
 Update an Identity
 
-This endpoint updates an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model). The full identity payload (except credentials) is expected. It is possible to update the identity's credentials as well.
+This endpoint updates an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model). The full identity
+payload, except credentials, is expected. For partial updates, use the [patchIdentity](https://www.ory.sh/docs/reference/api#tag/identity/operation/patchIdentity) operation.
+
+A credential can be provided via the `credentials` field in the request body.
+If provided, the credentials will be imported and added to the existing credentials of the identity.
 
 ### Example
 

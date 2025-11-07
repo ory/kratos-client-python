@@ -51,6 +51,9 @@ docs/IdentityWithCredentialsOidcConfig.md
 docs/IdentityWithCredentialsOidcConfigProvider.md
 docs/IdentityWithCredentialsPassword.md
 docs/IdentityWithCredentialsPasswordConfig.md
+docs/IdentityWithCredentialsSaml.md
+docs/IdentityWithCredentialsSamlConfig.md
+docs/IdentityWithCredentialsSamlConfigProvider.md
 docs/IsAlive200Response.md
 docs/IsReady503Response.md
 docs/JsonPatch.md
@@ -89,6 +92,7 @@ docs/UiContainer.md
 docs/UiNode.md
 docs/UiNodeAnchorAttributes.md
 docs/UiNodeAttributes.md
+docs/UiNodeDivisionAttributes.md
 docs/UiNodeImageAttributes.md
 docs/UiNodeInputAttributes.md
 docs/UiNodeMeta.md
@@ -104,6 +108,7 @@ docs/UpdateLoginFlowWithLookupSecretMethod.md
 docs/UpdateLoginFlowWithOidcMethod.md
 docs/UpdateLoginFlowWithPasskeyMethod.md
 docs/UpdateLoginFlowWithPasswordMethod.md
+docs/UpdateLoginFlowWithSamlMethod.md
 docs/UpdateLoginFlowWithTotpMethod.md
 docs/UpdateLoginFlowWithWebAuthnMethod.md
 docs/UpdateRecoveryFlowBody.md
@@ -115,6 +120,7 @@ docs/UpdateRegistrationFlowWithOidcMethod.md
 docs/UpdateRegistrationFlowWithPasskeyMethod.md
 docs/UpdateRegistrationFlowWithPasswordMethod.md
 docs/UpdateRegistrationFlowWithProfileMethod.md
+docs/UpdateRegistrationFlowWithSamlMethod.md
 docs/UpdateRegistrationFlowWithWebAuthnMethod.md
 docs/UpdateSettingsFlowBody.md
 docs/UpdateSettingsFlowWithLookupMethod.md
@@ -122,6 +128,7 @@ docs/UpdateSettingsFlowWithOidcMethod.md
 docs/UpdateSettingsFlowWithPasskeyMethod.md
 docs/UpdateSettingsFlowWithPasswordMethod.md
 docs/UpdateSettingsFlowWithProfileMethod.md
+docs/UpdateSettingsFlowWithSamlMethod.md
 docs/UpdateSettingsFlowWithTotpMethod.md
 docs/UpdateSettingsFlowWithWebAuthnMethod.md
 docs/UpdateVerificationFlowBody.md
@@ -187,6 +194,9 @@ ory_kratos_client/models/identity_with_credentials_oidc_config.py
 ory_kratos_client/models/identity_with_credentials_oidc_config_provider.py
 ory_kratos_client/models/identity_with_credentials_password.py
 ory_kratos_client/models/identity_with_credentials_password_config.py
+ory_kratos_client/models/identity_with_credentials_saml.py
+ory_kratos_client/models/identity_with_credentials_saml_config.py
+ory_kratos_client/models/identity_with_credentials_saml_config_provider.py
 ory_kratos_client/models/is_alive200_response.py
 ory_kratos_client/models/is_ready503_response.py
 ory_kratos_client/models/json_patch.py
@@ -224,6 +234,7 @@ ory_kratos_client/models/ui_container.py
 ory_kratos_client/models/ui_node.py
 ory_kratos_client/models/ui_node_anchor_attributes.py
 ory_kratos_client/models/ui_node_attributes.py
+ory_kratos_client/models/ui_node_division_attributes.py
 ory_kratos_client/models/ui_node_image_attributes.py
 ory_kratos_client/models/ui_node_input_attributes.py
 ory_kratos_client/models/ui_node_meta.py
@@ -239,6 +250,7 @@ ory_kratos_client/models/update_login_flow_with_lookup_secret_method.py
 ory_kratos_client/models/update_login_flow_with_oidc_method.py
 ory_kratos_client/models/update_login_flow_with_passkey_method.py
 ory_kratos_client/models/update_login_flow_with_password_method.py
+ory_kratos_client/models/update_login_flow_with_saml_method.py
 ory_kratos_client/models/update_login_flow_with_totp_method.py
 ory_kratos_client/models/update_login_flow_with_web_authn_method.py
 ory_kratos_client/models/update_recovery_flow_body.py
@@ -250,6 +262,7 @@ ory_kratos_client/models/update_registration_flow_with_oidc_method.py
 ory_kratos_client/models/update_registration_flow_with_passkey_method.py
 ory_kratos_client/models/update_registration_flow_with_password_method.py
 ory_kratos_client/models/update_registration_flow_with_profile_method.py
+ory_kratos_client/models/update_registration_flow_with_saml_method.py
 ory_kratos_client/models/update_registration_flow_with_web_authn_method.py
 ory_kratos_client/models/update_settings_flow_body.py
 ory_kratos_client/models/update_settings_flow_with_lookup_method.py
@@ -257,6 +270,7 @@ ory_kratos_client/models/update_settings_flow_with_oidc_method.py
 ory_kratos_client/models/update_settings_flow_with_passkey_method.py
 ory_kratos_client/models/update_settings_flow_with_password_method.py
 ory_kratos_client/models/update_settings_flow_with_profile_method.py
+ory_kratos_client/models/update_settings_flow_with_saml_method.py
 ory_kratos_client/models/update_settings_flow_with_totp_method.py
 ory_kratos_client/models/update_settings_flow_with_web_authn_method.py
 ory_kratos_client/models/update_verification_flow_body.py
@@ -321,6 +335,9 @@ test/test_identity_with_credentials_oidc_config.py
 test/test_identity_with_credentials_oidc_config_provider.py
 test/test_identity_with_credentials_password.py
 test/test_identity_with_credentials_password_config.py
+test/test_identity_with_credentials_saml.py
+test/test_identity_with_credentials_saml_config.py
+test/test_identity_with_credentials_saml_config_provider.py
 test/test_is_alive200_response.py
 test/test_is_ready503_response.py
 test/test_json_patch.py
@@ -359,6 +376,7 @@ test/test_ui_container.py
 test/test_ui_node.py
 test/test_ui_node_anchor_attributes.py
 test/test_ui_node_attributes.py
+test/test_ui_node_division_attributes.py
 test/test_ui_node_image_attributes.py
 test/test_ui_node_input_attributes.py
 test/test_ui_node_meta.py
@@ -374,6 +392,7 @@ test/test_update_login_flow_with_lookup_secret_method.py
 test/test_update_login_flow_with_oidc_method.py
 test/test_update_login_flow_with_passkey_method.py
 test/test_update_login_flow_with_password_method.py
+test/test_update_login_flow_with_saml_method.py
 test/test_update_login_flow_with_totp_method.py
 test/test_update_login_flow_with_web_authn_method.py
 test/test_update_recovery_flow_body.py
@@ -385,6 +404,7 @@ test/test_update_registration_flow_with_oidc_method.py
 test/test_update_registration_flow_with_passkey_method.py
 test/test_update_registration_flow_with_password_method.py
 test/test_update_registration_flow_with_profile_method.py
+test/test_update_registration_flow_with_saml_method.py
 test/test_update_registration_flow_with_web_authn_method.py
 test/test_update_settings_flow_body.py
 test/test_update_settings_flow_with_lookup_method.py
@@ -392,6 +412,7 @@ test/test_update_settings_flow_with_oidc_method.py
 test/test_update_settings_flow_with_passkey_method.py
 test/test_update_settings_flow_with_password_method.py
 test/test_update_settings_flow_with_profile_method.py
+test/test_update_settings_flow_with_saml_method.py
 test/test_update_settings_flow_with_totp_method.py
 test/test_update_settings_flow_with_web_authn_method.py
 test/test_update_verification_flow_body.py
